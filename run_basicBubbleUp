@@ -1,0 +1,4 @@
+from Comparison_structures.cuckoo_Basic_bubbleUp import run_baseline_bubble_up_basic
+
+if __name__ == "__main__":
+    run_baseline_bubble_up_basic()
