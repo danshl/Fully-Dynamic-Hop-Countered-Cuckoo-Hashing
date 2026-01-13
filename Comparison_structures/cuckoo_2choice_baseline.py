@@ -231,7 +231,7 @@ def print_summary_final_state(res: Dict[str, Any]) -> None:
 # ---------------- Public entry point ----------------
 
 def run_baseline_cuckoo_2choice(
-    cap_power: int = 18,
+    total_capacity,
     max_kicks: int = 1000,
     seed: int = 0,
     bins: Optional[List[Tuple[float, float]]] = None,
@@ -243,9 +243,8 @@ def run_baseline_cuckoo_2choice(
     if bins is None:
         bins = default_load_bins()
 
-    cap = 2 ** cap_power
     res = run_cuckoo_load_experiment(
-        capacity=cap,
+        capacity=total_capacity,
         load_bins=bins,
         max_kicks=max_kicks,
         seed=seed,

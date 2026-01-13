@@ -66,7 +66,7 @@ class MultiLayerCuckoo:
                 b["inserts"] += 1
 
     # --- insert core ---
-    def insert_with_pending(self, key: Any) -> Tuple[bool, Optional[Any]]:
+    def insert_with_pending(self, key: Any, active_layer_threshold = 0.998) -> Tuple[bool, Optional[Any]]:
         assert key is not None
         cfg = self.cfg
 
@@ -92,7 +92,7 @@ class MultiLayerCuckoo:
                 else:
                     pairs = list(enumerate(self.layers))
 
-                not_full = [(lid, L) for (lid, L) in pairs if L.occupancy() < 0.998]
+                not_full = [(lid, L) for (lid, L) in pairs if L.occupancy() < active_layer_threshold]
                 if not_full:
                     pairs = not_full
 
@@ -219,8 +219,8 @@ class MultiLayerCuckoo:
         self.jump_reduction(max_layers=cfg.active_layers)
         return False, current_key
 
-    def insert_or_open(self, key: Any) -> bool:
-        ok, pending = self.insert_with_pending(key)
+    def insert_or_open(self, key: Any, active_layer_threshold: float = 0.998) -> bool:
+        ok, pending = self.insert_with_pending(key,active_layer_threshold)
         if ok:
             return True
 
@@ -232,7 +232,7 @@ class MultiLayerCuckoo:
             top_cap = self.layers[-1].capacity
             self.layers.append(Layer(top_cap * 2))
 
-            ok2, pending2 = self.insert_with_pending(target)
+            ok2, pending2 = self.insert_with_pending(target,active_layer_threshold)
             if ok2:
                 return True
             target = pending2 if pending2 is not None else target

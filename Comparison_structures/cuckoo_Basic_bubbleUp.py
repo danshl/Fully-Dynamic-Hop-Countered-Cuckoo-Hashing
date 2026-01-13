@@ -308,7 +308,7 @@ def print_summary_final_state(res: Dict[str, Any]) -> None:
 # ---------------- Public entry point ----------------
 
 def run_baseline_bubble_up_basic(
-    cap_power: int = 18,
+    total_capacity,
     d: int = 17,
     max_total_steps: int = 1000,
     core_run_limit_mult: int = 8,
@@ -322,9 +322,8 @@ def run_baseline_bubble_up_basic(
     if bins is None:
         bins = default_load_bins()
 
-    cap = 2 ** cap_power
     res = run_bubbleup_load_experiment(
-        capacity=cap,
+        capacity=total_capacity,
         d=d,
         load_bins=bins,
         max_total_steps=max_total_steps,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from FDHCcuckoo.config import CuckooConfig
 from FDHCcuckoo.table import MultiLayerCuckoo
@@ -11,8 +11,9 @@ def run_single_simulation(
     base_power: int = 13,
     active_layers: int = 5,
     high_load_threshold: float = 0.95,
-    load_ranges: List[Tuple[float, float]] = None,
+    load_ranges: Optional[List[Tuple[float, float]]] = None,
     seed: int = 0,
+    active_layer_threshold: float = 0.998,  # NEW
 ):
     random.seed(seed)
 
@@ -29,7 +30,7 @@ def run_single_simulation(
 
     while True:
         k = next(gen)
-        if not tbl.insert_or_open(k):
+        if not tbl.insert_or_open(k, active_layer_threshold=active_layer_threshold):  # NEW
             break
         inserted += 1
 
@@ -38,6 +39,7 @@ def run_single_simulation(
     tbl.print_loads()
 
     return tbl
+
 
 if __name__ == "__main__":
     run_single_simulation()

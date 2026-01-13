@@ -272,7 +272,7 @@ def print_summary_final_state(res: Dict[str, Any]) -> None:
 # ---------------- Public entry point ----------------
 
 def run_baseline_kchoice_random_walk_stash(
-    cap_power: int = 18,
+    total_capacity,
     k: int = 17,
     max_kicks: int = 1000,
     stash_size: int = 8,
@@ -282,9 +282,8 @@ def run_baseline_kchoice_random_walk_stash(
     if bins is None:
         bins = default_load_bins()
 
-    cap = 2 ** cap_power
     res = run_cuckoo_load_experiment(
-        capacity=cap,
+        capacity=total_capacity,
         load_bins=bins,
         k=k,
         max_kicks=max_kicks,
