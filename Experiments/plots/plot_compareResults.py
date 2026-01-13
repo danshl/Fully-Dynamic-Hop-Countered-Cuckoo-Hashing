@@ -12,7 +12,7 @@ from Experiments.runners.run_fdhc import model_fdic
 
 
 # ============================================================
-# Bins (keep EXACTLY as in your working script)
+# Bins
 # ============================================================
 
 BINS: List[Tuple[float, float]] = [
@@ -46,14 +46,10 @@ def to_series(x: np.ndarray, y: List[Optional[float]]) -> Tuple[np.ndarray, np.n
 X_MID_PCT = mids(BINS) * 100.0
 
 
-# ============================================================
-# Model results (hardcoded NOW, replace with real calls later)
-# ============================================================
-
 @dataclass
 class ModelResult:
     name: str
-    avg_probes: List[Optional[float]]  # length must match len(BINS)
+    avg_probes: List[Optional[float]]
     fail_load: float
 
 
@@ -87,11 +83,10 @@ def get_all_models() -> List[ModelResult]:
 
 
 # ============================================================
-# Plotting (keeps your exact look & logic)
+# Plotting
 # ============================================================
 
 def plot_memory_utilization_high_end(models: List[ModelResult]) -> None:
-    # exclude baseline, keep only high-end models like your script
     hi = [m for m in models if m.fail_load >= 0.98]
 
     names = [m.name for m in hi]

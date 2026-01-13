@@ -30,13 +30,12 @@ def model_baseline_2choice(
     Calls the real runner and converts to ModelResult.
     """
     if bins is None:
-        bins = BINS  # the bins used by your plotting script
-
+        bins = BINS  
     res = run_baseline_cuckoo_2choice(
         total_capacity,
         max_kicks=max_kicks,
         seed=seed,
-        bins=None,  # let the baseline use its own default bins (fine-grained 90+), then map
+        bins=None,  
     )
 
     src_bins = res["load_bins"]

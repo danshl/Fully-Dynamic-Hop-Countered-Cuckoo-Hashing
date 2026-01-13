@@ -8,20 +8,18 @@ from FDHCcuckoo import run_single_simulation
 # Helper: F from base_power (d) and K active layers
 # ------------------------------------------------------------
 def F_from_base_power(base_power: int, K: int) -> int:
-    # If base capacity is 2^base_power and layers double each time:
-    # total capacity F = 2^d * (2^K - 1)
     return (1 << base_power) * ((1 << K) - 1)
 
 
 # ------------------------------------------------------------
-# Main: run base_power = 11..15, collect per-layer occupancy, plot
+# Main: run base_power
 # ------------------------------------------------------------
 if __name__ == "__main__":
     K = 5
     base_powers = range(11, 16)
 
     plt.figure(figsize=(8, 4.5))
-    x = list(range(K))  # layer indices 0..K-1
+    x = list(range(K))
 
     for p in base_powers:
         tbl = run_single_simulation(
@@ -31,11 +29,9 @@ if __name__ == "__main__":
             seed=0,
         )
 
-        # Take the LAST K layers (the active window), in order L0..L{K-1}
         layers = tbl.layers[-K:] if len(tbl.layers) >= K else tbl.layers
         occs: List[float] = [L.occupancy() for L in layers]
 
-        # Pad if for some reason we ended with fewer than K layers
         if len(occs) < K:
             occs = ([0.0] * (K - len(occs))) + occs
 

@@ -42,7 +42,7 @@ def model_multihash_stash_random_walk(
         max_kicks=max_kicks,
         stash_size=stash_size,
         seed=seed,
-        bins=bins,  # use runner's default bins, then map to plot bins
+        bins=bins,  
     )
 
     src_bins = res["load_bins"]

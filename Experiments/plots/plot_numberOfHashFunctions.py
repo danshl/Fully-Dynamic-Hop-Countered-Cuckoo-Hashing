@@ -5,7 +5,7 @@ from FDHCcuckoo import run_single_simulation
 
 
 # ------------------------------------------------------------
-# Data extraction (directly from table state)
+# Data extraction
 # ------------------------------------------------------------
 def extract_layer_level_stats(tbl) -> Dict[str, Any]:
     """
@@ -19,7 +19,6 @@ def extract_layer_level_stats(tbl) -> Dict[str, Any]:
     }
 
     for layer_id, L in enumerate(tbl.layers):
-        # placement index (level) -> number of elements
         level_counts = {int(lvl): int(len(keys)) for lvl, keys in L.iter_levels_desc()}
 
         snapshot["layers"].append({
@@ -92,14 +91,13 @@ def get_last_layer_dist(stats: Dict[str, Any]) -> Dict[int, int]:
 
 
 # ------------------------------------------------------------
-# Main experiment: base_power = 11..15 inclusive + plots
+# Main experiment
 # ------------------------------------------------------------
 if __name__ == "__main__":
-    BASE_POWERS = range(11, 16)  # 11..15 inclusive
+    BASE_POWERS = range(11, 16) 
 
     stats_by_power: Dict[int, Dict[str, Any]] = {}
 
-    # Run simulations
     for p in BASE_POWERS:
         tbl = run_single_simulation(
             base_power=p,
@@ -110,7 +108,7 @@ if __name__ == "__main__":
         stats_by_power[p] = extract_layer_level_stats(tbl)
 
     # --------------------------------------------------------
-    # Plot 1: CDF of placement index – last layer only
+    # Plot 1: CDF of placement index
     # --------------------------------------------------------
     plt.figure(figsize=(8, 4.8))
     for p in sorted(stats_by_power.keys()):
@@ -127,7 +125,7 @@ if __name__ == "__main__":
     plt.show()
 
     # --------------------------------------------------------
-    # Plot 2: Global CDF – all layers combined
+    # Plot 2: Global CDF 
     # --------------------------------------------------------
     plt.figure(figsize=(8, 4.8))
     for p in sorted(stats_by_power.keys()):

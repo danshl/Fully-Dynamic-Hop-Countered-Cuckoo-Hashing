@@ -27,10 +27,10 @@ if __name__ == "__main__":
             tbl = run_single_simulation(
                 base_power=p,
                 active_layers=K,
-                high_load_threshold=0.95,      # leave fixed (or choose what you want)
+                high_load_threshold=0.95,    
                 load_ranges=[load_range],
                 seed=seed,
-                active_layer_threshold=tau,     # NEW: this is the knob you sweep
+                active_layer_threshold=tau,   
             )
             results[p][tau] = avg_probes_in_range(tbl, load_range)
 

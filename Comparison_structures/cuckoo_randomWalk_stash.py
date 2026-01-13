@@ -35,7 +35,7 @@ def k_hashes(key: Any, capacity: int, k: int) -> List[int]:
     """
     kb = str(key).encode("utf-8", errors="surrogatepass")
     base1 = _h64(b"\xA5", kb)
-    base2 = _h64(b"\x5A", kb) | 1  # odd stride
+    base2 = _h64(b"\x5A", kb) | 1  
 
     idxs: List[int] = []
     seen = set()
@@ -197,7 +197,7 @@ def run_cuckoo_load_experiment(
                 "stash_size": stash_size,
                 "seed": seed,
                 "inserted": inserted,
-                "failure_load": load_before,   # load BEFORE the first failing insert
+                "failure_load": load_before,  
                 "stash_final": len(tbl.stash),
                 "bin_avg_probes": [
                     (bin_attempts[i] / bin_success[i]) if bin_success[i] else None
@@ -210,7 +210,6 @@ def run_cuckoo_load_experiment(
 
         inserted += 1
 
-        # Attribute probes to load BEFORE insertion.
         for i, (lo, hi) in enumerate(load_bins):
             if lo <= load_before < hi:
                 bin_attempts[i] += probes

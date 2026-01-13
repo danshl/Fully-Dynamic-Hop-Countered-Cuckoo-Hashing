@@ -40,7 +40,7 @@ def model_bubble_up_harvard(
         max_total_steps=max_total_steps,
         core_run_limit_mult=core_run_limit_mult,
         seed=seed,
-        bins=bins,  # use runner's default bins, then map to plot bins
+        bins=bins,
     )
 
     src_bins = res["load_bins"]

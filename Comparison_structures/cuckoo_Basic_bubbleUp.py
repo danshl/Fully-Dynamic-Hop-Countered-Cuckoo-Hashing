@@ -35,7 +35,7 @@ def d_hashes(key: Any, capacity: int, d: int) -> List[int]:
     """
     kb = str(key).encode("utf-8", errors="surrogatepass")
     base1 = _h64(b"\xA5", kb)
-    base2 = _h64(b"\x5A", kb) | 1  # odd step
+    base2 = _h64(b"\x5A", kb) | 1 
 
     idxs: List[int] = []
     seen = set()
@@ -66,7 +66,6 @@ class BasicBubbleUp:
         self.table: List[Optional[Any]] = [None] * self.capacity
         self.size: int = 0
 
-        # Approximates the "omega(log n)" stop criterion with const*log2(n)
         self.core_run_limit = max(
             1, self.core_run_limit_mult * int(math.log2(max(2, self.capacity)))
         )
@@ -85,8 +84,8 @@ class BasicBubbleUp:
         if key is None:
             raise ValueError("key cannot be None")
 
-        visited: set[int] = set()              # unique cell touches
-        hash_cache: Dict[Any, List[int]] = {}  # element -> its d indices (per-insert)
+        visited: set[int] = set()           
+        hash_cache: Dict[Any, List[int]] = {} 
         probes = 0
         steps = 0
 
@@ -111,10 +110,10 @@ class BasicBubbleUp:
             for i, p in enumerate(idxs, start=1):
                 if p == pos:
                     return i
-            return 1  # fallback (rare)
+            return 1
 
         x = key
-        choice = 0  # new element starts unplaced: choice(x)=0
+        choice = 0
 
         consecutive_type12 = 0
 
@@ -140,7 +139,7 @@ class BasicBubbleUp:
                 consecutive_type12 = 0
 
                 found_free: Optional[int] = None
-                for i in range(choice + 1, self.d - 1):  # up to d-2 inclusive (1-based)
+                for i in range(choice + 1, self.d - 1):
                     pos = idxs[i - 1]
                     touch(pos)
                     if self.table[pos] is None:
@@ -244,7 +243,6 @@ def run_bubbleup_load_experiment(
 
         inserted += 1
 
-        # Attribute probes to load BEFORE insertion.
         for i, (lo, hi) in enumerate(load_bins):
             if lo <= load_before < hi:
                 bin_probes_sum[i] += probes
@@ -315,8 +313,6 @@ def run_baseline_bubble_up_basic(
     seed: int = 0,
     bins: Optional[List[Tuple[float, float]]] = None,
 ) -> Dict[str, Any]:
-    # Bubble-Up baseline here is deterministic given the key sequence and parameters.
-    # (seed is kept for interface symmetry with other baselines.)
     _ = seed
 
     if bins is None:

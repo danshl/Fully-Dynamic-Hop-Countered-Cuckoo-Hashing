@@ -33,7 +33,7 @@ def k_hashes(key: Any, capacity: int, k: int) -> List[int]:
     """
     kb = str(key).encode("utf-8", errors="surrogatepass")
     base1 = _h64(b"\xA5", kb)
-    base2 = _h64(b"\x5A", kb) | 1  # ensure odd stride
+    base2 = _h64(b"\x5A", kb) | 1
 
     idxs: List[int] = []
     seen = set()

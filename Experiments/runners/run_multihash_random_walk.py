@@ -40,7 +40,7 @@ def model_multihash_random_walk(
         k=k,
         max_kicks=max_kicks,
         seed=seed,
-        bins=bins,  # use runner's default (fine-grained high-load), then map to plot bins
+        bins=bins,  
     )
 
     src_bins = res["load_bins"]

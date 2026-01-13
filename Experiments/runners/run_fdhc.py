@@ -10,7 +10,7 @@ from FDHCcuckoo.table import MultiLayerCuckoo
 
 
 # ============================================================
-# FDIC runner -> returns paper-style dict (like other baselines)
+# FDIC runner 
 # ============================================================
 
 def run_fdic_simulation(
@@ -39,7 +39,7 @@ def run_fdic_simulation(
     cfg = CuckooConfig(
         active_layers=active_layers,
         high_load_threshold=high_load_threshold,
-        load_ranges=bins,  # IMPORTANT: this makes stats align to your plot bins
+        load_ranges=bins,
     )
 
     tbl = MultiLayerCuckoo(base_capacity=2 ** cap_power, cfg=cfg)
@@ -50,7 +50,6 @@ def run_fdic_simulation(
     while True:
         key = f"{key_prefix}{inserted}"
 
-        # load BEFORE insertion attempt (like your other baselines)
         load_before = tbl.global_load_factor()
 
         ok = tbl.insert_or_open(key)
@@ -60,7 +59,6 @@ def run_fdic_simulation(
 
         inserted += 1
 
-    # Build avg list in EXACT bins order
     bin_avg: List[Optional[float]] = []
     for b in bins:
         st = tbl.stats.range_stats.get(b)
@@ -82,7 +80,6 @@ def run_fdic_simulation(
     }
 
     if print_final_state:
-        # Your existing printer already shows range stats too (since load_ranges were bins)
         tbl.print_loads()
 
     return res
@@ -122,5 +119,4 @@ def model_fdic(
 
 
 if __name__ == "__main__":
-    # Quick standalone run (optional)
     model_fdic(cap_power=23, active_layers=5, high_load_threshold=0.95, seed=0, bins=BINS)

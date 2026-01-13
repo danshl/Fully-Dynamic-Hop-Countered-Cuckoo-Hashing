@@ -9,7 +9,6 @@ from typing import Any, Optional, List, Tuple, Dict
 # ============================================================
 # Baseline: 2-choice cuckoo hashing (single-cell buckets)
 # - Two hash locations per key
-# - Random-walk eviction up to max_kicks
 # - Probe metric: UNIQUE cuckoo_hashes(x) computations per insertion
 # ============================================================
 
@@ -82,7 +81,6 @@ class Cuckoo2Choice:
 
         i1, i2 = get_hashes(key)
 
-        # Duplicate check (no extra probes; hashes already counted).
         if self.table[i1] == key or self.table[i2] == key:
             return True, probes
 
@@ -95,7 +93,6 @@ class Cuckoo2Choice:
                 self.size += 1
                 return True, probes
 
-            # Evict current resident.
             cur, self.table[cur_i] = self.table[cur_i], cur
 
             a, b = get_hashes(cur)
@@ -115,7 +112,6 @@ def run_cuckoo_load_experiment(
 ) -> Dict[str, Any]:
     tbl = Cuckoo2Choice(capacity=capacity, max_kicks=max_kicks, seed=seed)
 
-    # Stats per bin.
     bin_attempts = [0] * len(load_bins)
     bin_success = [0] * len(load_bins)
 
@@ -123,7 +119,6 @@ def run_cuckoo_load_experiment(
     while True:
         key = f"{key_prefix}{inserted}"
 
-        # Attribute insertion cost to the load BEFORE insertion.
         load_before = tbl.load()
 
         ok, probes = tbl.insert(key)
@@ -133,7 +128,7 @@ def run_cuckoo_load_experiment(
                 "max_kicks": max_kicks,
                 "seed": seed,
                 "inserted": inserted,
-                "failure_load": load_before,  # load where insertion first fails
+                "failure_load": load_before,
                 "bin_avg_probes": [
                     (bin_attempts[i] / bin_success[i]) if bin_success[i] else None
                     for i in range(len(load_bins))
@@ -145,7 +140,6 @@ def run_cuckoo_load_experiment(
 
         inserted += 1
 
-        # Update stats based on load_before.
         for i, (lo, hi) in enumerate(load_bins):
             if lo <= load_before < hi:
                 bin_attempts[i] += probes
@@ -156,7 +150,6 @@ def run_cuckoo_load_experiment(
 # ---------------- Output formatting (paper-style) ----------------
 
 def default_load_bins() -> List[Tuple[float, float]]:
-    # Coarse bins for low load + fine bins for high load (paper-style)
     return [
         (0.00, 0.10),
         (0.10, 0.20),

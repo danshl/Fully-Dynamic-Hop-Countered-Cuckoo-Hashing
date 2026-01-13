@@ -5,7 +5,6 @@ import hashlib
 class HashFamily:
     @staticmethod
     def h(layer_id: int, level: int, key_bytes: bytes, capacity: int) -> int:
-        # Double hashing with per-layer salt.
         assert level >= 1
 
         m1 = hashlib.sha256()

@@ -13,7 +13,7 @@ def run_single_simulation(
     high_load_threshold: float = 0.95,
     load_ranges: Optional[List[Tuple[float, float]]] = None,
     seed: int = 0,
-    active_layer_threshold: float = 0.998,  # NEW
+    active_layer_threshold: float = 0.998, 
 ):
     random.seed(seed)
 

@@ -12,7 +12,6 @@ class CuckooConfig:
     occ_stop: float = 1.0
     high_load_threshold: float = 0.95
 
-    # ranges measured using GLOBAL load factor AFTER a successful insert
     load_ranges: List[Tuple[float, float]] = None
 
     def __post_init__(self):
