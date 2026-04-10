@@ -53,11 +53,6 @@ class ModelResult:
     fail_load: float
 
 
-def model_ours() -> ModelResult:
-    avg = [1.052, 1.179, 1.346, 1.260, 1.224, 1.671, 2.140, 3.502, 5.477, 7.822, 18.907, 25.590, 45.889]
-    fail_load = 0.9940
-    return ModelResult("Our Model", avg, fail_load)
-
 def total_capacity_5_layers(cap_power: int, layers: int = 5) -> int:
     """
     Returns sum_{i=0..layers-1} 2^(cap_power + i)
@@ -115,12 +110,19 @@ def plot_memory_utilization_high_end(models: List[ModelResult]) -> None:
     plt.show()
 
 
+DASH_MODELS = {"Multi-hash + stash + rand"}
+
+
+def _linestyle(name: str) -> str:
+    return "--" if name in DASH_MODELS else "-"
+
+
 def plot_avg_probes_full(models: List[ModelResult]) -> None:
     plt.figure(figsize=(10, 5))
 
     for m in models:
         x2, y2 = to_series(X_MID_PCT, m.avg_probes)
-        plt.plot(x2, y2, marker="o", label=m.name)
+        plt.plot(x2, y2, marker="o", linestyle=_linestyle(m.name), label=m.name)
 
     plt.xlabel("Load bin midpoint (%)")
     plt.ylabel("Avg probes per insert")
@@ -137,7 +139,7 @@ def plot_avg_probes_zoom(models: List[ModelResult], zoom_from: float = 95.0) -> 
         x2, y2 = to_series(X_MID_PCT, m.avg_probes)
         mask = x2 >= zoom_from
         if np.any(mask):
-            plt.plot(x2[mask], y2[mask], marker="o", label=m.name)
+            plt.plot(x2[mask], y2[mask], marker="o", linestyle=_linestyle(m.name), label=m.name)
 
     plt.xlabel("Load bin midpoint (%)")
     plt.ylabel("Avg probes per insert")

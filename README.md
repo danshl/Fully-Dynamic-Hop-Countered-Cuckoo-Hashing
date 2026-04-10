@@ -95,16 +95,39 @@ to ensure a fair comparison.
 
 ## Running the Code
 
-A standard single-table simulation can be run directly from Python:
+Run capacity comparison table (avg probes per insert across different capacities and load ranges):
 
 ```bash
-python -m run_FDHCcuckoo
-python -m run_basicBubbleUp
+python3 -m run_capacity_comparison
 ```
 
-Experiments and plots are executed as modules from the repository root, for example:
+
+
+A standard single-table simulation can be run directly from the repository root:
 
 ```bash
-python -m experiments.plots.plot_compareResults
-python -m experiments.plots.plot_occupancyPerLayer
+python3 -m run_FDHCcuckoo
+python3 -m run_basicBubbleUp
+python3 -m run_baseline2Choice
+python3 -m run_randomKChoice
+python3 -m run_randomWalkAndStash
+```
+
+Experiment runners collect structured statistics:
+
+```bash
+python3 -m Experiments.runners.run_fdhc
+python3 -m Experiments.runners.run_baseline_2choice
+python3 -m Experiments.runners.run_bubble_up_harvard
+python3 -m Experiments.runners.run_multihash_random_walk
+python3 -m Experiments.runners.run_multihash_stash_random_walk
+```
+
+Plots are generated as modules from the repository root:
+
+```bash
+python3 -m Experiments.plots.plot_compareResults
+python3 -m Experiments.plots.plot_occupancyPerLayer
+python3 -m Experiments.plots.plot_numberOfHashFunctions
+python3 -m Experiments.plots.plot_sensetiveParameters
 ```
