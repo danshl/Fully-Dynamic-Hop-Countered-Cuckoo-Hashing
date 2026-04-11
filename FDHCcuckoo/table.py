@@ -142,7 +142,6 @@ class MultiLayerCuckoo:
 
                 # B) swap if allowed (scan active)
                 did_swap = False
-                gsa_candidate = None
 
                 for layer_id, L in pairs:
                     idx = get_index(layer_id, L)
@@ -166,9 +165,10 @@ class MultiLayerCuckoo:
                         current_key = evicted_key
                         current_kb = key_to_bytes(current_key)
                         did_swap = True
+                        gsa_candidate = None  # reset only on real swap
                         break
 
-                    # track best candidate (smallest resident_level)
+                    # track best candidate (smallest resident_level) — persists across levels
                     if cfg.gsa_best:
                         if (gsa_candidate is None) or (resident_level < gsa_candidate.resident_level):
                             gsa_candidate = GSACandidate(layer_id, cell.key, resident_level, level)
@@ -176,14 +176,12 @@ class MultiLayerCuckoo:
                 if did_swap:
                     break
 
-                # C) optional GSA-best (only when no swap happened)
+                # C) deferred takeover — fires when enough levels have passed
                 if cfg.gsa_best and gsa_candidate is not None:
                     cand = gsa_candidate
-                    L = self.layers[cand.layer_id]
-
-                    if level >= cand.resident_level + eff_gap * 2 and cand.seen_level > cand.resident_level:
+                    if level >= cand.resident_level + eff_gap * 2:
+                        L = self.layers[cand.layer_id]
                         kb_best = key_to_bytes(cand.key)
-
                         idx_resident = self.hashes.h(cand.layer_id, cand.resident_level, kb_best, L.capacity)
                         probes += 1
                         if probes >= cfg.probe_limit:
@@ -202,15 +200,15 @@ class MultiLayerCuckoo:
                             cell = L.at(idx_resident)
                             if (not cell.is_empty) and cell.key == cand.key and cell.placement_level == cand.resident_level:
                                 evicted_key = cell.key
-                                evicted_level = cell.placement_level
 
-                                L.unregister_level(evicted_key, evicted_level)
+                                L.unregister_level(evicted_key, cand.resident_level)
                                 cell.key = current_key
                                 cell.placement_level = cand.seen_level
                                 L.register_level(current_key, cand.seen_level)
 
                                 current_key = evicted_key
                                 current_kb = key_to_bytes(current_key)
+                                gsa_candidate = None
                                 break
 
                 level += 1
