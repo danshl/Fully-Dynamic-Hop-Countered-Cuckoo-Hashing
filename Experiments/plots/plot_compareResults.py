@@ -93,7 +93,7 @@ def plot_memory_utilization_high_end(models: List[ModelResult]) -> None:
     plt.bar(x, loads * 100.0)
     plt.xticks(x, names, rotation=18, ha="right")
     plt.ylabel("Max achieved load (%)")
-    plt.title("Memory utilization (zoomed: 99–100%)")
+    plt.title("Memory utilization (zoomed: 98–100%)")
     plt.ylim(98.0, 100.0)
 
     for i, load in enumerate(loads):
